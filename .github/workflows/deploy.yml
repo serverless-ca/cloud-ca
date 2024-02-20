@@ -92,7 +92,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: serverless-ca/terraform-aws-ca
-          token: ${{secrets.GITHUB_READ_ONLY_TOKEN}}
+          token: ${{secrets.GH_TOKEN}}
           path: terraform-aws-ca
 
       - name: Terraform initialise
