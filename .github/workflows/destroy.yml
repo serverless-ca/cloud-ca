@@ -1,0 +1,42 @@
+name: Destroy Cloud CA
+on:
+  workflow_dispatch:
+
+jobs:
+  terraform_destroy:
+    name: Terraform destroy
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Terraform setup
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.1
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Clone CA Terraform Module
+        uses: actions/checkout@v4
+        with:
+          repository: serverless-ca/terraform-aws-ca
+          token: ${{secrets.GH_TOKEN}}
+          path: terraform-modules
+
+      - name: Configure AWS Credentials - Dev
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN}}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Terraform initialise
+        run: >
+          terraform init 
+          -backend-config=bucket=${{ secrets.TERRAFORM_STATE_BUCKET}} 
+          -backend-config=key=${{ secrets.TERRAFORM_STATE_KEY}} 
+          -backend-config=region=${{ secrets.TERRAFORM_STATE_REGION}}
+
+      - name: terraform destroy
+        run: terraform destroy -auto-approve

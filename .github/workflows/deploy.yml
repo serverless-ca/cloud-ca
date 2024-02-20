@@ -53,10 +53,6 @@ jobs:
     needs:
       - terraform_validate
       - secret_scan
-    defaults:
-      run:
-        working-directory: ./examples/default
-
     permissions:
       id-token: write
       contents: read
