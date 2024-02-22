@@ -22,3 +22,16 @@ terraform.rc
 
 # Ignore module directory
 terraform-aws-ca/
+
+# Ignore .DS_Store files
+.DS_Store
+
+# Ignore .idea directory
+.idea/
+
+# Ignore .vscode directory
+.vscode/
+
+# Python
+.venv/
+__pycache__
