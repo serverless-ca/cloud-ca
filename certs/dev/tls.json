@@ -1,1 +1,18 @@
-[]
+[
+    {
+        "common_name": "Cloud Architect",
+        "lifetime": 365,
+        "csr_file": "cloud-architect.csr"
+    },
+    {
+        "common_name": "Cloud Engineer",
+        "lifetime": 365,
+        "csr_file": "cloud-engineer.csr"
+    },
+    {
+        "common_name": "server.cloud-ca.com",
+        "sans": ["server.cloud-ca.com", "server2.cloud-ca.com"],
+        "lifetime": 365,
+        "csr_file": "server-cloud-ca-com.csr"
+    }
+]
