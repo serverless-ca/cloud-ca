@@ -6,6 +6,7 @@ module "certificate_authority" {
   hosted_zone_domain = var.hosted_zone_domain
   hosted_zone_id     = data.aws_route53_zone.public.zone_id
   cert_info_files    = ["tls", "revoked", "revoked-root-ca"]
+  csr_files          = local.csr_files
   issuing_ca_info    = local.issuing_ca_info
   root_ca_info       = local.root_ca_info
   public_crl         = true

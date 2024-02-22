@@ -18,4 +18,10 @@ locals {
     commonName           = "Cloud Root CA"
     pathLengthConstraint = 1
   }
+
+  csr_files = [
+    "cloud-architect.csr",
+    "cloud-engineer.csr",
+    "server-cloud-ca-com.csr"
+  ]
 }
