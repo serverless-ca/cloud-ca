@@ -1,10 +1,19 @@
 # cloud-ca
 Cloud CA demonstration built using AWS CA Terraform Module
 
+## IMPORTANT
+If cloning this repository to use as a basis for your own CA, it's essential that you:
+* Delete the CSR files in the [csr directory](./certs/dev/csrs/)
+* Delete references to these files in [locals.tf](./locals.tf) and [tls.json](./certs/dev/tls.json)
+* Replace the contents of [revoked.json](./certs/dev/revoked.json) with an empty list `[]`
+* Change the domain name listed in [variables.tf](variables.tf) to one for which there's a hosted zone in your AWS account 
+
 ## CA Overview
 * ECDSA Issuing and Root CA
 * Public certs and CRL
 * Environment: `dev`
+* Certs issued from CSR files
+* Revoked certificate
 
 ## CA Certificates and CRLs
 
@@ -37,7 +46,7 @@ source .venv/bin/activate (Linux / MacOS)
 pip install -r tests/requirements-dev.txt
 python tests/client-cert.py
 ```
-* you will now have a client key and certificate on your laptop
+* you will now have a client key and certificate on your laptop at `~/certs`
 * bundled Root CA and Issuing CA certs are also provided
 
 
