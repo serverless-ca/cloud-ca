@@ -1,6 +1,6 @@
 module "certificate_authority" {
   source = "./terraform-aws-ca"
-  # source  = "serverless-ca/terraform-aws-ca"
+  # source  = "serverless-ca/ca/aws"
   # version = "1.0.0"
 
   hosted_zone_domain = var.hosted_zone_domain
