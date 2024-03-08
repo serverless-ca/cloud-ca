@@ -64,7 +64,7 @@ jobs:
         with:
           terraform_version: 1.6.1
 
-      - name: checkout
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Set up Python 3.12
@@ -104,10 +104,10 @@ jobs:
           key: modules_terraform-aws-ca-lambda_build_${{ hashFiles('./modules/terraform-aws-ca-lambda/lambda_code/**') }}_${{ hashFiles('./modules/terraform-aws-ca-lambda/utils/**') }}_py${{ steps.setup_python.outputs.python-version }}
           path: ./terraform-aws-ca/modules/terraform-aws-ca-lambda/build
 
-      - name: terraform plan
+      - name: Terraform plan
         run: terraform plan -out tfplan
 
-      - name: terraform apply
+      - name: Terraform apply
         run: terraform apply -auto-approve tfplan
 
   start_ca:
