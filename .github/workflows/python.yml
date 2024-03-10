@@ -24,7 +24,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install -r tests/requirements-dev.txt
+          pip install -r requirements-dev.txt
           
       - name: Black
         run: |
