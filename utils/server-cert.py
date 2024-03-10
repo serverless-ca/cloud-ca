@@ -4,9 +4,9 @@ import base64
 import boto3
 import os
 from cryptography.hazmat.primitives.serialization import load_der_private_key
-from utils_tests.certs.crypto import create_csr_info, crypto_encode_private_key, crypto_tls_cert_signing_request
-from utils_tests.certs.kms import kms_generate_key_pair, kms_get_kms_key_id
-from utils_tests.aws.lambdas import get_lambda_name
+from modules.certs.crypto import create_csr_info, crypto_encode_private_key, crypto_tls_cert_signing_request
+from modules.certs.kms import kms_generate_key_pair, kms_get_kms_key_id
+from modules.aws.lambdas import get_lambda_name
 
 # identify home directory and create certs subdirectory if needed
 homedir = os.path.expanduser("~")
@@ -30,6 +30,7 @@ def main():  # pylint:disable=too-many-locals
     state = "England"
     organization = "Serverless Inc"
     organizational_unit = "Security Operations"
+    purposes = ["server_auth"]
     output_path_cert_key = f"{base_path}/server-key.pem"
     output_path_cert_pem = f"{base_path}/server-cert.pem"
     output_path_cert_crt = f"{base_path}/server-cert.crt"
@@ -48,6 +49,7 @@ def main():  # pylint:disable=too-many-locals
     # Construct JSON data to pass to Lambda function
     request_payload = {
         "common_name": common_name,
+        "purposes": purposes,
         "sans": sans,
         "lifetime": lifetime,
         "base64_csr_data": base64.b64encode(csr_pem).decode("utf-8"),
