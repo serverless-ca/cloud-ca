@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 import os
 from cryptography.hazmat.primitives.serialization import load_der_private_key
-from utils_tests.certs.crypto import create_csr_info, crypto_encode_private_key, crypto_tls_cert_signing_request
-from utils_tests.certs.kms import kms_generate_key_pair, kms_get_kms_key_id
+from modules.certs.crypto import create_csr_info, crypto_encode_private_key, crypto_tls_cert_signing_request
+from modules.certs.kms import kms_generate_key_pair, kms_get_kms_key_id
 
 
 # identify home directory and create certs subdirectory if needed
@@ -15,18 +15,18 @@ if not os.path.exists(base_path):
 
 def main():  # pylint:disable=too-many-locals
     """
-    Create test Certificate Signing Request (CSR) for default Serverless CA environment
+    Create test server Certificate Signing Request (CSR) for default Serverless CA environment
     """
 
     # set variables
-    common_name = "Cloud Architect"
+    common_name = "server.example.com"
     country = "GB"
     locality = "London"
     state = "England"
     organization = "Serverless Inc"
     organizational_unit = "Security Operations"
-    output_path_cert_key = f"{base_path}/client-cert-request-key.pem"
-    output_path_csr = f"{base_path}/client-cert-request.csr"
+    output_path_cert_key = f"{base_path}/server-cert-request-key.pem"
+    output_path_csr = f"{base_path}/server-cert-request.csr"
     key_alias = "serverless-tls-keygen-dev"
 
     # create key pair using symmetric KMS key to provide entropy
