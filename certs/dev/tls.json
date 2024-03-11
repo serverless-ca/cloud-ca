@@ -14,5 +14,12 @@
         "sans": ["server.cloud-ca.com", "server2.cloud-ca.com"],
         "lifetime": 365,
         "csr_file": "server-cloud-ca-com.csr"
+    },
+    {
+        "common_name": "server.example.com",
+        "purposes": ["server_auth"],
+        "sans": ["server.example.com", "server2.example.com"],
+        "lifetime": 365,
+        "csr_file": "server-cert-request.csr"
     }
 ]
