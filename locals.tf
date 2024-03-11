@@ -22,6 +22,7 @@ locals {
   csr_files = [
     "cloud-architect.csr",
     "cloud-engineer.csr",
+    "server-cert-request.csr",
     "server-cloud-ca-com.csr"
   ]
 }
