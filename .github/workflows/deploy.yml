@@ -50,6 +50,7 @@ jobs:
   terraform_plan_apply:
     name: Terraform plan & apply
     runs-on: ubuntu-latest
+    environment: 'cloudca'
     needs:
       - terraform_validate
       - secret_scan
