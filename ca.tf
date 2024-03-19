@@ -1,7 +1,6 @@
 module "certificate_authority" {
-  source = "./terraform-aws-ca"
-  # source  = "serverless-ca/ca/aws"
-  # version = "1.0.0"
+  source  = "serverless-ca/ca/aws"
+  version = "0.1.0"
 
   hosted_zone_domain = var.hosted_zone_domain
   hosted_zone_id     = data.aws_route53_zone.public.zone_id
