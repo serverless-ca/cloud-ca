@@ -27,9 +27,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Terraform validate
-        id: fmt
+      - name: Terraform format
         run: terraform fmt -check -recursive
+
+      - name: Terraform init
+        run: terraform init -get -backend=false
+
+      - name: Terraform validate
+        run: terraform validate
 
   secret_scan:
     name: Secret scan
@@ -86,13 +91,6 @@ jobs:
           role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN}}
           aws-region: ${{ secrets.AWS_REGION }}
       
-      - name: Clone terraform-aws-ca
-        uses: actions/checkout@v4
-        with:
-          repository: serverless-ca/terraform-aws-ca
-          token: ${{secrets.GH_TOKEN}}
-          path: terraform-aws-ca
-
       - name: Terraform initialise
         run: >
           terraform init 
