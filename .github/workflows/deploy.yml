@@ -8,6 +8,8 @@ on:
       - ".github/workflows/deploy.yml"
     branches:
       - main
+env:
+  TF_VAR_s3_aws_principals: ${{ secrets.S3_AWS_PRINCIPALS }}
 
 jobs:
   terraform_validate:
