@@ -9,7 +9,7 @@ on:
     branches:
       - main
 env:
-  TF_VAR_s3_aws_principals: ${{ secrets.S3_AWS_PRINCIPALS }}
+  TF_VAR_s3_aws_principals: ${{ secrets.CLOUD_APP_USER_ARN }}
 
 jobs:
   terraform_validate:

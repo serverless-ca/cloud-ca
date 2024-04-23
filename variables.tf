@@ -3,7 +3,7 @@ variable "hosted_zone_domain" {
   default     = "certs.cloud-ca.com" # Change to subdomain hosted zone for CRL publication within same AWS account
 }
 
-variable "s3_aws_principals" {
-  description = "AWS principals allowed to get certificate info from external CA S3 bucket"
-  default     = []
+variable "cloud_app_user_arn" {
+  description = "ARN of cloud app IAM user allowed to get certificate info from external CA S3 bucket"
+  default     = ""
 }
