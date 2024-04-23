@@ -9,6 +9,7 @@ module "certificate_authority" {
   issuing_ca_info    = local.issuing_ca_info
   root_ca_info       = local.root_ca_info
   public_crl         = true
+  s3_aws_principals  = var.s3_aws_principals 
 
   providers = {
     aws           = aws
