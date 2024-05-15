@@ -105,7 +105,7 @@ jobs:
         uses: actions/cache@v4
         with:
           key: modules_terraform-aws-ca-lambda_build_${{ hashFiles('./.terraform/modules/certificate_authority/modules/terraform-aws-ca-lambda/lambda_code/**') }}_${{ hashFiles('./.terraform/modules/certificate_authority/modules/terraform-aws-ca-lambda/utils/**') }}_${{ github.job }}_py${{ steps.setup_python.outputs.python-version }}
-          path: ./terraform-aws-ca/modules/terraform-aws-ca-lambda/build
+          path: ./.terraform/modules/certificate_authority/modules/terraform-aws-ca-lambda/build
 
       - name: Terraform plan
         run: terraform plan -out tfplan
