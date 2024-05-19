@@ -21,19 +21,19 @@ If cloning this repository to use as a basis for your own CA, it's essential tha
 
 |                                       CDP - Root CA                                        |                                         CDP - Issuing CA                                         |
 :------------:|:------------:|
-|                    http://certs.cloud-ca.com/serverless-root-ca-dev.crl                     |                      http://certs.cloud-ca.com/serverless-issuing-ca-dev.crl                      |
+|                    [http://certs.cloud-ca.com/serverless-root-ca-dev.crl](https://certs.cloud-ca.com/serverless-root-ca-dev.crl)                     |                      [http://certs.cloud-ca.com/serverless-issuing-ca-dev.crl](https://certs.cloud-ca.com/serverless-issuing-ca-dev.crl)                      |
 
 ### Authority Information Access (AIA)
 
 |                                       AIA - Root CA                                        |                                       AIA - Issuing CA                                        |
 |:------------:|:------------:|
-|                    http://certs.cloud-ca.com/serverless-root-ca-dev.crt                     |                    http://certs.cloud-ca.com/serverless-issuing-ca-dev.crt                     |
+|                    [http://certs.cloud-ca.com/serverless-root-ca-dev.crt](https://certs.cloud-ca.com/serverless-root-ca-dev.crt)                     |                    [http://certs.cloud-ca.com/serverless-issuing-ca-dev.crt](https://certs.cloud-ca.com/serverless-issuing-ca-dev.crt)                     |
 
 ### CA Bundle (for TrustStore)
 
 |                                          CA Bundle                                           |
 |:--------------------------------------------------------------------------------------------:|
-|                      http://certs.cloud-ca.com/serverless-ca-bundle-dev.pem                       |
+|                      [http://certs.cloud-ca.com/serverless-ca-bundle-dev.pem](https://certs.cloud-ca.com/serverless-ca-bundle-dev.pem)                       |
 
 
 ## Create client certificate
