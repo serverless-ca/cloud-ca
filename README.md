@@ -3,6 +3,7 @@ Cloud CA demonstration built using AWS CA Terraform Module
 
 ## IMPORTANT
 If cloning this repository to use as a basis for your own CA, it's essential that you:
+* Update to the latest version of the CA
 * Delete the CSR files in the [csr directory](./certs/dev/csrs/)
 * Delete references to these files in [locals.tf](./locals.tf) and [tls.json](./certs/dev/tls.json)
 * Replace the contents of [revoked.json](./certs/dev/revoked.json) with an empty list `[]`
