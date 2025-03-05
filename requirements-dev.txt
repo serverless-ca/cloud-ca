@@ -1,12 +1,11 @@
-setuptools==69.0.3
 assertpy==1.1
-boto3==1.34.30
-black==24.3.0
-cryptography == 42.0.4
+boto3==1.37.6
+black==25.1.0
+cryptography == 44.0.2
 asn1crypto == 1.5.1
 certvalidator == 0.11.1
-prospector==1.10.3
-bandit==1.7.5
-pytest==7.4.4
-validators==0.22.0
-requests==2.31.0
+prospector==1.15.2
+bandit==1.8.3
+pytest==8.3.5
+validators==0.34.0
+requests==2.32.3
