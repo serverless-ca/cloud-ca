@@ -9,4 +9,4 @@ bandit==1.8.3
 pytest==8.3.5
 validators==0.34.0
 requests==2.32.3
-git+https://github.com/wbond/oscrypto.git@1547f535001ba568b239b8797465536759c742a3
+oscrypto @ git+https://github.com/wbond/oscrypto.git@1547f535001ba568b239b8797465536759c742a3
