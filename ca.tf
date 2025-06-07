@@ -1,6 +1,6 @@
 module "certificate_authority" {
   source  = "serverless-ca/ca/aws"
-  version = "1.8.6"
+  version = "1.9.0"
 
   hosted_zone_domain = var.hosted_zone_domain
   hosted_zone_id     = data.aws_route53_zone.public.zone_id
