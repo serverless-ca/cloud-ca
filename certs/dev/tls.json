@@ -20,6 +20,8 @@
         "purposes": ["server_auth"],
         "sans": ["server.example.com", "server2.example.com"],
         "lifetime": 365,
-        "csr_file": "server-cert-request.csr"
+        "csr_file": "server-cert-request.csr",
+        "organization": "Example Corp",
+        "organizational_unit": "Engineering"
     }
 ]
