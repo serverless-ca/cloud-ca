@@ -9,6 +9,7 @@ on:
     branches:
       - main
 env:
+  TF_VAR_cloud_app_sso_arn: ${{ secrets.CLOUD_APP_SSO_ARN }} # delete if not needed
   TF_VAR_cloud_app_user_arn: ${{ secrets.CLOUD_APP_USER_ARN }} # delete if not needed
   TF_VAR_elb_service_role_arn: ${{ secrets.ELB_SERVICE_ROLE_ARN }} # delete if not needed
 

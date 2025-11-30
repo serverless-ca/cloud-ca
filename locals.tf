@@ -26,8 +26,9 @@ locals {
     "server-cloud-ca-com.csr"
   ]
 
-  s3_aws_principals = var.cloud_app_user_arn == "" && var.elb_service_role_arn == "" ? [] : [
+  s3_aws_principals = coalesce(var.cloud_app_user_arn,var.cloud_app_sso_arn,var.elb_service_role_arn) == "" ? [] : [
     var.cloud_app_user_arn,
+    var.cloud_app_sso_arn,
     var.elb_service_role_arn
   ]
 }
