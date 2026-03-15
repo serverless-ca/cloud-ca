@@ -17,3 +17,10 @@ variable "elb_service_role_arn" {
   description = "ARN of ELB service role in cloud app AWS account allowed to get certificate info from external CA S3 bucket"
   default     = ""
 }
+
+variable "slack_token" {
+  type        = string
+  description = "Slack App OAuth token"
+  default     = ""
+  sensitive   = true
+}
