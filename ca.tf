@@ -1,6 +1,6 @@
 module "certificate_authority" {
   source  = "serverless-ca/ca/aws"
-  version = "2.9.0"
+  version = "3.0.0"
 
   hosted_zone_domain  = var.hosted_zone_domain
   hosted_zone_id      = data.aws_route53_zone.public.zone_id
@@ -11,10 +11,7 @@ module "certificate_authority" {
   root_ca_info        = local.root_ca_info
   root_ca_key_spec    = "ECC_NIST_P256"
   public_crl          = true
+  slack_channels      = ["devsecops-dev"]
+  slack_token         = var.slack_token
   s3_aws_principals   = local.s3_aws_principals
-
-  providers = {
-    aws           = aws
-    aws.us-east-1 = aws.us-east-1 # certificates for CloudFront must be in this region
-  }
 }

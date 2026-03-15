@@ -23,5 +23,14 @@
         "csr_file": "server-cert-request.csr",
         "organization": "Example Corp",
         "organizational_unit": "Engineering"
+    },
+    {
+        "common_name": "test-expiry.example.com",
+        "purposes": ["server_auth"],
+        "sans": ["test-expiry.example.com"],
+        "lifetime": 1,
+        "csr_file": "test-expiry.csr",
+        "organization": "Example Corp",
+        "organizational_unit": "DevOps"
     }
 ]
