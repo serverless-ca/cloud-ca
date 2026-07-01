@@ -20,7 +20,7 @@ jobs:
       checks: write
     steps:
       - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@a5ad31d6a139d249332a2605b85202e8c0b78450 # v2.19.1
+        uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411 # v2.19.4
         with:
           egress-policy: audit
 
@@ -33,7 +33,7 @@ jobs:
           echo "LOWER_REPO_NAME=$(basename ${{ github.repository }} | tr [:upper:] [:lower:])" >> $GITHUB_ENV
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@ec61189d14ec14c8efccab744f656cffd0e33f37 # v6.1.0
+        uses: aws-actions/configure-aws-credentials@e7f100cf4c008499ea8adda475de1042d6975c7b # v6.2.0
         with:
           role-to-assume: "${{ secrets.AWS_BACKUP_ROLE_PREFIX }}${{ env.LOWER_REPO_NAME }}"
           aws-region: "${{ secrets.AWS_REGION }}"
