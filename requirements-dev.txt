@@ -1,5 +1,5 @@
 assertpy==1.1
-boto3==1.43.83
+boto3==1.43.85
 black==25.1.0
 cryptography ==50.0.1
 asn1crypto == 1.5.1
