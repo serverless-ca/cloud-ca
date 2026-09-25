@@ -6,7 +6,7 @@ asn1crypto == 1.5.1
 certvalidator == 0.11.1
 prospector==1.19.1
 bandit==1.9.4
-pytest==8.3.5
+pytest==9.0.3
 validators==0.35.0
 requests==2.34.2
 oscrypto @ git+https://github.com/wbond/oscrypto.git@1547f535001ba568b239b8797465536759c742a3
