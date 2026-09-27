@@ -133,63 +133,27 @@ jobs:
       - name: Terraform apply
         run: terraform apply -auto-approve tfplan
 
-  start_ca:
-    name: Start CA
+  start_ca_and_test:
+    name: Start ${{ matrix.ca }} CA and run integration tests
     runs-on: ubuntu-latest
     needs:
       - terraform_plan_apply
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - ca: ECDSA
+            project: serverless
+          - ca: ML-DSA
+            project: pqc
+    env:
+      # target one of the two CA deployments sharing this AWS account
+      CA_PROJECT: ${{ matrix.project }}
     permissions:
       id-token: write
       contents: read
       checks: write
-    steps:
-      - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@a5ad31d6a139d249332a2605b85202e8c0b78450 # v2.19.1
-        with:
-          egress-policy: audit
 
-      - name: checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-
-      - name: Set up Python 3.14
-        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
-        with:
-          python-version: "3.14"
-
-      - name: Display Python version
-        run: python -c "import sys; print(sys.version)"
-
-      - name: Install dependencies
-        run: |
-          pip install -r scripts/requirements.txt
-
-      - name: Configure AWS Credentials - Dev
-        uses: aws-actions/configure-aws-credentials@ec61189d14ec14c8efccab744f656cffd0e33f37 # v6.1.0
-        with:
-          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN}}
-          aws-region: ${{ secrets.AWS_REGION }}
-
-      - name: Start ECDSA CA
-        env:
-          CA_PROJECT: serverless
-        run: |
-          python scripts/start_ca_step_function.py
-
-      - name: Start ML-DSA CA
-        env:
-          CA_PROJECT: pqc
-        run: |
-          python scripts/start_ca_step_function.py
-
-  integration_tests:
-    name: Integration Tests
-    runs-on: ubuntu-latest
-    needs: start_ca
-    permissions:
-      id-token: write
-      contents: read
-      checks: write
-        
     steps:
       - name: Harden the runner (Audit all outbound calls)
         uses: step-security/harden-runner@a5ad31d6a139d249332a2605b85202e8c0b78450 # v2.19.1
@@ -204,6 +168,9 @@ jobs:
         with:
           python-version: "3.14"
 
+      - name: Display Python version
+        run: python -c "import sys; print(sys.version)"
+
       - name: Install dependencies
         run: |
           pip install -r requirements-dev.txt
@@ -214,8 +181,10 @@ jobs:
           role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN}}
           aws-region: ${{ secrets.AWS_REGION }}
 
+      - name: Start CA
+        run: |
+          python scripts/start_ca_step_function.py
+
       - name: Integration tests
-        env:
-          CA_PROJECT: serverless # ECDSA CA, the ML-DSA CA is tested using the terraform-aws-ca repository utils
         run: |
           pytest -v tests
