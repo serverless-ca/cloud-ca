@@ -1,6 +1,8 @@
 from assertpy import assert_that
 import base64
-from certvalidator.errors import InvalidCertificateError
+import pytest
+from cryptography.exceptions import UnsupportedAlgorithm
+from cryptography.hazmat.primitives.asymmetric import mldsa
 from cryptography.hazmat.primitives.serialization import load_der_private_key
 from cryptography.hazmat.backends import default_backend
 from cryptography.x509 import DNSName, ExtensionOID, load_pem_x509_certificate
@@ -9,6 +11,8 @@ from utils.modules.certs.crypto import (
     create_csr_info,
     certificate_validated,
     convert_truststore,
+    generate_key,
+    InvalidCertificateError,
 )
 from utils.modules.certs.kms import kms_generate_key_pair
 from utils.modules.aws.kms import get_kms_details
@@ -471,3 +475,71 @@ def test_cert_issued_without_san_if_common_name_invalid_dns():
     assert_that(issued_cert.extensions.get_extension_for_oid).raises(Exception).when_called_with(
         ExtensionOID.SUBJECT_ALTERNATIVE_NAME
     ).is_equal_to("No <ObjectIdentifier(oid=2.5.29.17, name=subjectAltName)> extension was found")
+
+
+def test_ml_dsa_client_cert_issued():
+    """
+    Test post-quantum client certificate issued from a Certificate Signing Request with an
+    ML-DSA-44 subject key (FIPS 204), generated locally as AWS KMS GenerateDataKeyPair
+    doesn't support ML-DSA. Set CA_PROJECT=pqc to target the ML-DSA CA, where the resulting
+    certificate is fully post-quantum; under the ECDSA CA it's a mixed chain, which is
+    equally valid X.509.
+    """
+    try:
+        private_key = generate_key("ml-dsa-44")
+    except UnsupportedAlgorithm:
+        pytest.skip("ML-DSA not supported by cryptography backend")
+
+    common_name = "pipeline-test-ml-dsa-client"
+    purposes = ["client_auth"]
+
+    csr_info = create_csr_info(common_name)
+
+    # Generate Certificate Signing Request, signed with the local ML-DSA key
+    csr = crypto_tls_cert_signing_request(private_key, csr_info)
+
+    # Construct JSON data to pass to Lambda function
+    base64_csr_data = base64.b64encode(csr).decode("utf-8")
+    json_data = {
+        "common_name": common_name,
+        "purposes": purposes,
+        "base64_csr_data": base64_csr_data,
+        "passphrase": False,
+        "lifetime": 1,
+        "force_issue": True,
+        "cert_bundle": True,
+    }
+
+    # Identify TLS certificate Lambda function
+    function_name = get_lambda_name("-tls")
+    print(f"Invoking Lambda function {function_name}")
+
+    # Invoke TLS certificate Lambda function
+    response = invoke_lambda(function_name, json_data)
+
+    # Inspect the response which includes the signed certificate
+    result = response["CertificateInfo"]["CommonName"]
+    print(f"Certificate issued for {common_name}")
+
+    # Assert that the certificate was issued for the correct common name
+    assert_that(result).is_equal_to(common_name)
+
+    # extract certificate from response including bundled certificate chain
+    base64_cert_data = response["Base64Certificate"]
+    cert_data = base64.b64decode(base64_cert_data).decode("utf-8")
+
+    # issued certificate carries the ML-DSA-44 subject public key
+    issued_cert = load_pem_x509_certificate(cert_data.encode("utf-8"), default_backend())
+    print(f"Issued certificate Subject: {issued_cert.subject.rfc4514_string()}")
+    assert_that(issued_cert.public_key()).is_instance_of(mldsa.MLDSA44PublicKey)
+
+    # convert bundle to trust store format
+    trust_roots = convert_truststore(cert_data)
+
+    # validate certificate chain, purpose and revocation status
+    assert_that(certificate_validated(cert_data, trust_roots, purposes)).is_true()
+
+    # check server auth extension is not present in certificate
+    assert_that(certificate_validated).raises(InvalidCertificateError).when_called_with(
+        cert_data, trust_roots, ["server_auth"]
+    ).is_equal_to("The X.509 certificate provided is not valid for the purpose of server auth")

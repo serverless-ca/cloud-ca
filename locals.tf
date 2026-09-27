@@ -19,6 +19,26 @@ locals {
     pathLengthConstraint = 1
   }
 
+  pqc_issuing_ca_info = {
+    country              = "GB"
+    locality             = "London"
+    lifetime             = 3650
+    organization         = "Cloud CA"
+    organizationalUnit   = "Security Operations"
+    commonName           = "Cloud ML-DSA Issuing CA"
+    pathLengthConstraint = 0
+  }
+
+  pqc_root_ca_info = {
+    country              = "GB"
+    locality             = "London"
+    lifetime             = 7300
+    organization         = "Cloud CA"
+    organizationalUnit   = "Security Operations"
+    commonName           = "Cloud ML-DSA Root CA"
+    pathLengthConstraint = 1
+  }
+
   csr_files = [
     "cloud-architect.csr",
     "cloud-engineer.csr",

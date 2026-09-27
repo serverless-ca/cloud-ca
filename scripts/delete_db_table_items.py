@@ -1,3 +1,5 @@
+from os import environ
+
 from boto3 import client
 
 
@@ -9,9 +11,22 @@ def get_dynamo_db_table():
     dynamodb_client = client("dynamodb")
 
     tables = dynamodb_client.list_tables()["TableNames"]
-    table = [t for t in tables if "CA" in t]
+    tables = [t for t in tables if "CA" in t]
 
-    return table[0]
+    # optional CA_PROJECT filter to target one of the CA deployments in the same account,
+    # table names are PascalCase, e.g. project pqc, env dev -> PqcCADev
+    project = environ.get("CA_PROJECT")
+    if project:
+        tables = [t for t in tables if t.startswith(project.title() + "CA")]
+
+    # this script deletes all items from the table, so refuse to guess between candidates
+    if len(tables) != 1:
+        raise SystemExit(
+            f"Expected exactly one CA DynamoDB table, found {tables or 'none'}: "
+            "set CA_PROJECT to identify the target deployment"
+        )
+
+    return tables[0]
 
 
 def delete_dynamo_db_table_items(table):

@@ -169,7 +169,15 @@ jobs:
           role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN}}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Start CA
+      - name: Start ECDSA CA
+        env:
+          CA_PROJECT: serverless
+        run: |
+          python scripts/start_ca_step_function.py
+
+      - name: Start ML-DSA CA
+        env:
+          CA_PROJECT: pqc
         run: |
           python scripts/start_ca_step_function.py
 
@@ -207,5 +215,7 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Integration tests
+        env:
+          CA_PROJECT: serverless # ECDSA CA, the ML-DSA CA is tested using the terraform-aws-ca repository utils
         run: |
           pytest -v tests
