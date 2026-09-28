@@ -4,7 +4,6 @@ from cryptography.hazmat.primitives.serialization import load_der_private_key
 from modules.certs.crypto import create_csr_info, crypto_encode_private_key, crypto_tls_cert_signing_request
 from modules.certs.kms import kms_generate_key_pair, kms_get_kms_key_id
 
-
 # identify home directory and create certs subdirectory if needed
 homedir = os.path.expanduser("~")
 base_path = f"{homedir}/certs"
