@@ -2,7 +2,7 @@
 
 module "certificate_authority_pqc" {
   source  = "serverless-ca/ca/aws"
-  version = "4.2.0"
+  version = "4.3.0"
 
   project                    = "pqc"
   external_s3_bucket_name    = module.certificate_authority.external_s3_bucket_name

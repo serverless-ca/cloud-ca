@@ -5,11 +5,12 @@ from cryptography.exceptions import UnsupportedAlgorithm
 from cryptography.hazmat.primitives.asymmetric import mldsa
 from cryptography.hazmat.primitives.serialization import load_der_private_key
 from cryptography.hazmat.backends import default_backend
-from cryptography.x509 import DNSName, ExtensionOID, load_pem_x509_certificate
+from cryptography.x509 import DNSName, ExtensionOID, load_der_x509_certificate, load_pem_x509_certificate
 from utils.modules.certs.crypto import (
     crypto_tls_cert_signing_request,
     create_csr_info,
     certificate_validated,
+    convert_pem_to_der,
     convert_truststore,
     generate_key,
     InvalidCertificateError,
@@ -532,6 +533,23 @@ def test_ml_dsa_client_cert_issued():
     issued_cert = load_pem_x509_certificate(cert_data.encode("utf-8"), default_backend())
     print(f"Issued certificate Subject: {issued_cert.subject.rfc4514_string()}")
     assert_that(issued_cert.public_key()).is_instance_of(mldsa.MLDSA44PublicKey)
+
+    # keyUsage conforms to RFC 9881: ML-DSA is signature-only, so digitalSignature is
+    # asserted and the encipherment and key agreement bits are not
+    key_usage = issued_cert.extensions.get_extension_for_oid(ExtensionOID.KEY_USAGE).value
+    assert_that(key_usage.digital_signature).is_true()
+    assert_that(key_usage.key_encipherment).is_false()
+    assert_that(key_usage.data_encipherment).is_false()
+    assert_that(key_usage.key_agreement).is_false()
+
+    # the response's CA chain, written to ca-bundle.pem by utils/client-cert.py, holds the
+    # Issuing CA and Root CA certificates only - never the end-entity certificate
+    ca_chain = convert_pem_to_der(base64.b64decode(response["Base64CaChain"]))
+    assert_that(ca_chain).is_length(2)
+    chain_certs = [load_der_x509_certificate(der, default_backend()) for der in ca_chain]
+    assert_that([c.subject for c in chain_certs]).does_not_contain(issued_cert.subject)
+    for chain_cert in chain_certs:
+        assert_that(chain_cert.extensions.get_extension_for_oid(ExtensionOID.BASIC_CONSTRAINTS).value.ca).is_true()
 
     # convert bundle to trust store format
     trust_roots = convert_truststore(cert_data)
