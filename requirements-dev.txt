@@ -1,5 +1,5 @@
 assertpy==1.1
-boto3==1.43.111
+boto3==1.43.114
 black==25.1.0
 cryptography==50.0.2
 prospector==1.19.1
