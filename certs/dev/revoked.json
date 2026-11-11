@@ -1,1 +1,6 @@
-[]
+[
+    {
+        "common_name": "My Test Certificate",
+        "serial_number": "556440494943871187820122746985417048567340512221"
+    }   
+]
